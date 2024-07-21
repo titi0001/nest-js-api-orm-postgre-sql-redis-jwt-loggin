@@ -9,6 +9,15 @@ export class UsuarioRepository {
     this.usuarios.push(usuario);
   }
 
+  private async buscarUsuarioPorId(id: string) {
+    const usuario = this.usuarios.find((usuario) => usuario.id === id);
+
+    if (!usuario) {
+      throw new Error('Usuário não encontrado');
+    }
+    return usuario;
+  }
+
   async listarUsuarios() {
     return this.usuarios;
   }
@@ -24,22 +33,22 @@ export class UsuarioRepository {
     id: string,
     dadosParaAtualizar: Partial<UsuarioEntity>,
   ) {
-    const usuarioAtualizado = this.usuarios.find(
-      (usuario) => usuario.id === id,
-    );
-
-    if (!usuarioAtualizado) {
-      throw new Error('Usuário não encontrado');
-    }
+    const usuario = await this.buscarUsuarioPorId(id);
 
     Object.entries(dadosParaAtualizar).forEach(([chave, valor]) => {
       if (chave === 'id') {
         return;
       }
 
-      usuarioAtualizado[chave] = valor;
+      usuario[chave] = valor;
     });
 
-    return usuarioAtualizado;
+    return usuario;
+  }
+
+  async deletaUsuario(id: string) {
+    const usuario = await this.buscarUsuarioPorId(id);
+
+    return this.usuarios.splice(this.usuarios.indexOf(usuario), 1);
   }
 }
