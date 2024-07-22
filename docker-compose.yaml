@@ -1,11 +1,11 @@
-    version: '3.5'
+    version: '3.8'
     
     services:
       postgres:
         image: postgres:latest
         environment:
-          POSTGRES_USER: ${DB_USERNAME}
-          POSTGRES_PASSWORD: ${DB_PASSWORD}
+          POSTGRES_USER: ${DB_USER}
+          POSTGRES_PASSWORD: ${DB_PASS}
           PGDATA: /data/postgres
         volumes:
           - postgres:/data/postgres
