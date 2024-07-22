@@ -29,7 +29,7 @@ export class UsuarioController {
     this.usuarioRepository.salvar(usuarioEntity);
     return {
       usuario: new ListaUsuariosDTO(usuarioEntity.id, usuarioEntity.nome),
-      message: 'Usuário criado com sucesso',
+      mensagem: 'Usuário criado com sucesso',
     };
   }
 
@@ -54,7 +54,7 @@ export class UsuarioController {
 
     return {
       usuario: usuarioAtualizado,
-      message: 'Usuário atualizado com sucesso',
+      mensagem: 'Usuário atualizado com sucesso',
     };
   }
 
@@ -64,7 +64,7 @@ export class UsuarioController {
 
     return {
       usuario: usuarioRemovido,
-      message: 'Usuário removido com sucesso',
+      mensagem: 'Usuário removido com sucesso',
     };
   }
 }

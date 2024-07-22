@@ -1,7 +1,18 @@
-import { IsEmail, IsNotEmpty, IsOptional, MinLength } from 'class-validator';
+import {
+  IsEmail,
+  IsNotEmpty,
+  IsOptional,
+  IsString,
+  IsUUID,
+  MinLength,
+} from 'class-validator';
 import { EmailUnico } from '../validacao/emailUnico.validator';
 
 export class AtualizaUsuarioDTO {
+  @IsUUID(undefined, { message: 'ID inválido' })
+  id: string;
+
+  @IsString()
   @IsNotEmpty({ message: 'Nome é obrigatório' })
   @IsOptional()
   nome: string;
