@@ -11,7 +11,7 @@ export class ProdutoImagemProduto {
 
   @Column({
     name: 'descricao',
-    length: 255,
+    length: 100,
     nullable: false,
   })
   descricao: string;

@@ -14,7 +14,7 @@ export class ProdutoEntity {
 
   @Column({
     name: 'usuario_id',
-    length: 36,
+    length: 100,
     nullable: false,
   })
   usuarioId: string;

@@ -14,14 +14,14 @@ export class UsuarioEntity {
 
   @Column({
     name: 'nome',
-    length: 70,
+    length: 100,
     nullable: false,
   })
   nome: string;
 
   @Column({
     name: 'email',
-    length: 100,
+    length: 70,
     nullable: false,
   })
   email: string;
