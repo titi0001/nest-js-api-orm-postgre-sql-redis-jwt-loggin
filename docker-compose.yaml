@@ -6,9 +6,11 @@
         environment:
           POSTGRES_USER: ${DB_USER}
           POSTGRES_PASSWORD: ${DB_PASS}
+          POSTGRES_DB: ${DB_NAME}
           PGDATA: /data/postgres
         volumes:
           - postgres:/data/postgres
+          - ./init.sql:/docker-entrypoint-initdb.d/init.sql
         ports:
           - "5432:5432"
         networks:
