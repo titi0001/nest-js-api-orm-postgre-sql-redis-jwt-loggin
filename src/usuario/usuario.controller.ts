@@ -13,10 +13,14 @@ import { UsuarioEntity } from './usuario.entity';
 import { v4 as uuid } from 'uuid';
 import { ListaUsuariosDTO } from './dto/ListaUsuarios.dto';
 import { AtualizaUsuarioDTO } from './dto/AtualizaUsuario.dto';
+import { UsuarioService } from './usuario.service';
 
 @Controller('/usuarios')
 export class UsuarioController {
-  constructor(private usuarioRepository: UsuarioRepository) {}
+  constructor(
+    private usuarioRepository: UsuarioRepository,
+    private readonly usuarioService: UsuarioService,
+  ) {}
 
   @Post()
   async criaUsuario(@Body() dadosDoUsuario: CriaUsuarioDTO) {
@@ -26,7 +30,7 @@ export class UsuarioController {
     usuarioEntity.senha = dadosDoUsuario.senha;
     usuarioEntity.id = uuid();
 
-    this.usuarioRepository.salvar(usuarioEntity);
+    this.usuarioService.criaUsuario(usuarioEntity);
     return {
       usuario: new ListaUsuariosDTO(usuarioEntity.id, usuarioEntity.nome),
       mensagem: 'Usuário criado com sucesso',
@@ -35,11 +39,9 @@ export class UsuarioController {
 
   @Get()
   async listaUsuarios() {
-    const usuarios = await this.usuarioRepository.listarUsuarios();
-    const usuariosSemSenha = usuarios.map(
-      (usuario) => new ListaUsuariosDTO(usuario.id, usuario.nome),
-    );
-    return usuariosSemSenha;
+    const usuariosSalvos = await this.usuarioService.listaUsuarios();
+
+    return usuariosSalvos;
   }
 
   @Put('/:id')
@@ -47,7 +49,7 @@ export class UsuarioController {
     @Param('id') id: string,
     @Body() dadosParaAtualizar: AtualizaUsuarioDTO,
   ) {
-    const usuarioAtualizado = await this.usuarioRepository.atualizaUsuario(
+    const usuarioAtualizado = await this.usuarioService.atualizaUsuario(
       id,
       dadosParaAtualizar,
     );
@@ -60,7 +62,7 @@ export class UsuarioController {
 
   @Delete('/:id')
   async removeUsuario(@Param('id') id: string) {
-    const usuarioRemovido = await this.usuarioRepository.deletaUsuario(id);
+    const usuarioRemovido = await this.usuarioService.deletaUsuario(id);
 
     return {
       usuario: usuarioRemovido,
