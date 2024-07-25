@@ -13,18 +13,27 @@ import { AtualizaProdutoDTO } from './dto/AtulizaProduto.dto';
 import { CriaProdutoDTO } from './dto/CriaProduto.dto';
 import { ProdutoEntity } from './produto.entity';
 import { ProdutoService } from './produto.service';
+import { UsuarioService } from 'src/usuario/usuario.service';
 
 @Controller('produtos')
 export class ProdutoController {
-  constructor(private readonly produtoService: ProdutoService) {}
+  constructor(
+    private readonly produtoService: ProdutoService,
+    private readonly usuarioService: UsuarioService,
+  ) {}
 
   @Post()
   async criaNovo(@Body() dadosProduto: CriaProdutoDTO) {
     const produto = new ProdutoEntity();
 
+    const usuario = await this.usuarioService.findById(dadosProduto.usuarioId);
+    if (!usuario) {
+      throw new Error('Usuário não encontrado');
+    }
+
     produto.id = randomUUID();
     produto.nome = dadosProduto.nome;
-    produto.usuarioId = dadosProduto.usuarioId;
+    produto.usuario = usuario;
     produto.valor = dadosProduto.valor;
     produto.quantidade = dadosProduto.quantidade;
     produto.descricao = dadosProduto.descricao;
