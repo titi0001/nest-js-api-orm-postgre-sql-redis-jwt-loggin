@@ -12,6 +12,10 @@ export class UsuarioService {
     private readonly usuarioRepository: Repository<UsuarioEntity>,
   ) {}
 
+  async findById(id: string): Promise<UsuarioEntity> {
+    return await this.usuarioRepository.findOne({ where: { id } });
+  }
+
   async listaUsuarios() {
     const usuariosSalvos = await this.usuarioRepository.find();
     const usuariosLista = usuariosSalvos.map(
