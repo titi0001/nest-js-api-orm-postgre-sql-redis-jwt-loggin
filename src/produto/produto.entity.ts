@@ -3,24 +3,19 @@ import {
   CreateDateColumn,
   DeleteDateColumn,
   Entity,
+  ManyToOne,
   OneToMany,
   PrimaryGeneratedColumn,
   UpdateDateColumn,
 } from 'typeorm';
 import { ProdutoCaracteristicaEntity } from './produto-caracteristica.entity';
 import { ProdutoImagemEntity } from './produto-imagem.entity';
+import { UsuarioEntity } from 'src/usuario/usuario.entity';
 
 @Entity({ name: 'produtos' })
 export class ProdutoEntity {
   @PrimaryGeneratedColumn('uuid')
   id: string;
-
-  @Column({
-    name: 'usuario_id',
-    length: 100,
-    nullable: false,
-  })
-  usuarioId: string;
 
   @Column({
     name: 'nome',
@@ -54,6 +49,9 @@ export class ProdutoEntity {
     nullable: false,
   })
   categoria: string;
+
+  @ManyToOne(() => UsuarioEntity, (usuario) => usuario.produtos, {})
+  usuario: UsuarioEntity;
 
   @OneToMany(
     () => ProdutoCaracteristicaEntity,
