@@ -11,8 +11,13 @@ import {
   Min,
   ValidateNested,
 } from 'class-validator';
+import { PrimaryGeneratedColumn } from 'typeorm';
+import { ProdutoEntity } from '../produto.entity';
 
 export class CaracteristicaProdutoDTO {
+  @PrimaryGeneratedColumn('uuid')
+  id: string;
+
   @IsString()
   @IsNotEmpty({ message: 'Nome da característica não pode ser vazio' })
   nome: string;
@@ -20,15 +25,22 @@ export class CaracteristicaProdutoDTO {
   @IsString()
   @IsNotEmpty({ message: 'Descrição da característica não pode ser vazio' })
   descricao: string;
+
+  produto: ProdutoEntity;
 }
 
 export class ImagemProdutoDTO {
+  @PrimaryGeneratedColumn('uuid')
+  id: string;
+
   @IsUrl()
   url: string;
 
   @IsString()
   @IsNotEmpty({ message: 'Descrição da imagem não pode ser vazia' })
   descricao: string;
+
+  produto: ProdutoEntity;
 }
 
 export class CriaProdutoDTO {
