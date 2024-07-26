@@ -50,7 +50,9 @@ export class ProdutoEntity {
   })
   categoria: string;
 
-  @ManyToOne(() => UsuarioEntity, (usuario) => usuario.produtos, {})
+  @ManyToOne(() => UsuarioEntity, (usuario) => usuario.produtos, {
+    onDelete: 'CASCADE',
+  })
   usuario: UsuarioEntity;
 
   @OneToMany(
