@@ -17,6 +17,8 @@ export class ProdutoEntity {
   @PrimaryGeneratedColumn('uuid')
   id: string;
 
+  @
+
   @Column({
     name: 'nome',
     length: 100,
@@ -31,10 +33,10 @@ export class ProdutoEntity {
   valor: number;
 
   @Column({
-    name: 'quantidade',
+    name: 'quantidade_disponivel',
     nullable: false,
   })
-  quantidade: number;
+  quantidadeDisponivel: number;
 
   @Column({
     name: 'descricao',

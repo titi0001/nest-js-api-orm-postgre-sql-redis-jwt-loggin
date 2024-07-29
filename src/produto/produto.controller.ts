@@ -24,25 +24,16 @@ export class ProdutoController {
 
   @Post()
   async criaNovo(@Body() dadosProduto: CriaProdutoDTO) {
-    const produto = new ProdutoEntity();
+    const produtoCadastrado = new this.produtoService.criaProduto(dadosProduto);
 
-    const usuario = await this.usuarioService.findById(dadosProduto.usuarioId);
-    if (!usuario) {
-      throw new Error('Usuário não encontrado');
-    }
-
-    produto.id = randomUUID();
-    produto.nome = dadosProduto.nome;
-    produto.usuario = usuario;
-    produto.valor = dadosProduto.valor;
-    produto.quantidade = dadosProduto.quantidade;
-    produto.descricao = dadosProduto.descricao;
-    produto.categoria = dadosProduto.categoria;
-    produto.caracteristicas = dadosProduto.caracteristicas;
-    produto.imagens = dadosProduto.imagens;
-
-    const produtoCadastrado = this.produtoService.criaProduto(produto);
-    return produtoCadastrado;
+    // const usuario = await this.usuarioService.findById(dadosProduto.usuarioId);
+    // if (!usuario) {
+    //   throw new Error('Usuário não encontrado');
+    // }
+    return {
+      mensagem: 'Produto criado com sucesso',
+      produto: produtoCadastrado,
+    };
   }
 
   @Get()
