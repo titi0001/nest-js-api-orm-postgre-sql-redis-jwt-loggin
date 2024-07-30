@@ -7,29 +7,20 @@ import {
   Post,
   Put,
 } from '@nestjs/common';
-import { randomUUID } from 'crypto';
 
 import { AtualizaProdutoDTO } from './dto/AtualizaProduto.dto';
 import { CriaProdutoDTO } from './dto/CriaProduto.dto';
-import { ProdutoEntity } from './produto.entity';
 import { ProdutoService } from './produto.service';
-import { UsuarioService } from 'src/usuario/usuario.service';
 
 @Controller('produtos')
 export class ProdutoController {
-  constructor(
-    private readonly produtoService: ProdutoService,
-    private readonly usuarioService: UsuarioService,
-  ) {}
+  constructor(private readonly produtoService: ProdutoService) {}
 
   @Post()
   async criaNovo(@Body() dadosProduto: CriaProdutoDTO) {
-    const produtoCadastrado = new this.produtoService.criaProduto(dadosProduto);
+    const produtoCadastrado =
+      await this.produtoService.criaProduto(dadosProduto);
 
-    // const usuario = await this.usuarioService.findById(dadosProduto.usuarioId);
-    // if (!usuario) {
-    //   throw new Error('Usuário não encontrado');
-    // }
     return {
       mensagem: 'Produto criado com sucesso',
       produto: produtoCadastrado,

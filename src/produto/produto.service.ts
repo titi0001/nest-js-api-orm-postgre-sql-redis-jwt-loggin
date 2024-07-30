@@ -13,11 +13,16 @@ export class ProdutoService {
     private readonly produtoRepository: Repository<ProdutoEntity>,
   ) {}
 
-  async criaProduto(dadosProduto: CriaProdutoDTO): Promise<ProdutoEntity> {
+  async criaProduto(dadosProduto: CriaProdutoDTO) {
     const produtoEntity = new ProdutoEntity();
 
     produtoEntity.nome = dadosProduto.nome;
-    produtoEntity.usarioId = dadosProduto.usuarioId;
+    produtoEntity.valor = dadosProduto.valor;
+    produtoEntity.quantidadeDisponivel = dadosProduto.quantidadeDisponivel;
+    produtoEntity.descricao = dadosProduto.descricao;
+    produtoEntity.categoria = dadosProduto.categoria;
+
+    return await this.produtoRepository.save(produtoEntity);
   }
 
   async listaProdutos(): Promise<ListaProdutoDTO[]> {
