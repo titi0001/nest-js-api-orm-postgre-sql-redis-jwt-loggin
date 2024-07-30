@@ -7,7 +7,6 @@ import {
   Post,
   Put,
 } from '@nestjs/common';
-import { UsuarioRepository } from './usuario.repository';
 import { CriaUsuarioDTO } from './dto/CriaUsuario.dto';
 import { UsuarioEntity } from './usuario.entity';
 import { v4 as uuid } from 'uuid';
@@ -17,10 +16,7 @@ import { UsuarioService } from './usuario.service';
 
 @Controller('/usuarios')
 export class UsuarioController {
-  constructor(
-    private usuarioRepository: UsuarioRepository,
-    private readonly usuarioService: UsuarioService,
-  ) {}
+  constructor(private readonly usuarioService: UsuarioService) {}
 
   @Post()
   async criaUsuario(@Body() dadosDoUsuario: CriaUsuarioDTO) {
