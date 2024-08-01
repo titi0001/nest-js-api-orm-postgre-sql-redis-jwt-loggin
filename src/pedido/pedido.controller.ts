@@ -37,7 +37,7 @@ export class PedidoController {
 
   @Patch(':id')
   async atualizaPedido(
-    @Param('pedidoId') pedidoId: string,
+    @Param('id') pedidoId: string,
     @Body() dadosParaAtualizar: AtualizaPedidoDTO,
   ) {
     const pedidoAtualizado = await this.pedidoService.atualizaPedido(
