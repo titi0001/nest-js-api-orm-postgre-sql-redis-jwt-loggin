@@ -1,5 +1,6 @@
 import { Entity, Column, PrimaryGeneratedColumn, ManyToOne } from 'typeorm';
 import { PedidoEntity } from './pedido.entity';
+import { ProdutoEntity } from '../produto/produto.entity';
 
 @Entity({ name: 'pedido_itens' })
 export class PedidoItemEntity {
@@ -24,4 +25,9 @@ export class PedidoItemEntity {
     onUpdate: 'CASCADE',
   })
   pedido: PedidoEntity;
+
+  @ManyToOne(() => ProdutoEntity, (produto) => produto.pedidoItens, {
+    cascade: ['update'],
+  })
+  produto: ProdutoEntity;
 }
