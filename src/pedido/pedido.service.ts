@@ -1,4 +1,8 @@
-import { Injectable, NotFoundException } from '@nestjs/common';
+import {
+  BadRequestException,
+  Injectable,
+  NotFoundException,
+} from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { PedidoEntity } from './pedido.entity';
 import { In, Repository } from 'typeorm';
@@ -19,34 +23,50 @@ export class PedidoService {
     private readonly produtoRepository: Repository<ProdutoEntity>,
   ) {}
 
+  private trataDadosDoPedido(
+    dadosDoPedido: CriaPedidoDTO,
+    produtosRelacionados: ProdutoEntity[],
+  ) {
+    dadosDoPedido.pedidosItem.forEach((itemPedido) => {
+      const produtoRelacionado = produtosRelacionados.find(
+        (produto) => produto.id === itemPedido.produtoId,
+      );
+      if (produtoRelacionado === undefined) {
+        throw new NotFoundException('Produto não encontrado');
+      }
+      if (itemPedido.quantidade > produtoRelacionado.quantidadeDisponivel) {
+        throw new BadRequestException(
+          `A quantidade solicitada (${itemPedido.quantidade}) é maior que a quantidade disponível (${produtoRelacionado.quantidadeDisponivel}) do produto ${produtoRelacionado.nome}`,
+        );
+      }
+    });
+  }
+
   async cadastraPedido(usuarioId: string, dadosDoPedido: CriaPedidoDTO) {
     const usuario = await this.usuarioRepository.findOneBy({ id: usuarioId });
-    const produtosIds = dadosDoPedido.pedidosItem.map(
-      (itemPedido) => itemPedido.produtoId,
-    );
-
-    const produtosRelacionados = await this.produtoRepository.findBy({
-      id: In(produtosIds),
-    });
-
-    const pedidoEntity = new PedidoEntity();
-    pedidoEntity.status = StatusPedido.EM_PROCESSAMENTO;
-
     if (usuario === undefined) {
       throw new NotFoundException('Usuário não encontrado');
     }
 
+    const produtosIds = dadosDoPedido.pedidosItem.map(
+      (itemPedido) => itemPedido.produtoId,
+    );
+    const produtosRelacionados = await this.produtoRepository.findBy({
+      id: In(produtosIds),
+    });
+
+    this.trataDadosDoPedido(dadosDoPedido, produtosRelacionados);
+
+    const pedidoEntity = new PedidoEntity();
+    pedidoEntity.status = StatusPedido.EM_PROCESSAMENTO;
+
     const pedidosItensEntity = dadosDoPedido.pedidosItem.map((itemPedido) => {
-      const produtoRelacionado = produtosRelacionados.find(
+      const pedidoItemEntity = new PedidoItemEntity();
+      const produtosRelacionado = produtosRelacionados.find(
         (produto) => produto.id === itemPedido.produtoId,
       );
-
-      if (produtoRelacionado === undefined) {
-        throw new NotFoundException('Produto não encontrado');
-      }
-      const pedidoItemEntity = new PedidoItemEntity();
-
-      pedidoItemEntity.precoVenda = produtoRelacionado.valor;
+      pedidoItemEntity.produto = produtosRelacionado!;
+      pedidoItemEntity.precoVenda = produtosRelacionado!.valor;
       pedidoItemEntity.quantidade = itemPedido.quantidade;
       pedidoItemEntity.produto.quantidadeDisponivel -= itemPedido.quantidade;
       return pedidoItemEntity;
