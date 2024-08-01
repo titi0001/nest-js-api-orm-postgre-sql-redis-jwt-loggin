@@ -6,16 +6,14 @@ import {
   IsNumber,
   IsString,
   IsUrl,
-  IsUUID,
   MaxLength,
   Min,
   ValidateNested,
 } from 'class-validator';
-import { PrimaryGeneratedColumn } from 'typeorm';
+
 import { ProdutoEntity } from '../produto.entity';
 
 export class CaracteristicaProdutoDTO {
-  @PrimaryGeneratedColumn('uuid')
   id: string;
 
   @IsString()
@@ -30,7 +28,6 @@ export class CaracteristicaProdutoDTO {
 }
 
 export class ImagemProdutoDTO {
-  @PrimaryGeneratedColumn('uuid')
   id: string;
 
   @IsUrl()
@@ -44,9 +41,6 @@ export class ImagemProdutoDTO {
 }
 
 export class CriaProdutoDTO {
-  @IsUUID(undefined, { message: 'ID de usuário inválido' })
-  usuarioId: string;
-
   @IsString()
   @IsNotEmpty({ message: 'Nome do produto não pode ser vazio' })
   nome: string;
@@ -68,7 +62,7 @@ export class CriaProdutoDTO {
 
   @ValidateNested()
   @IsArray()
-  @ArrayMinSize(3)
+  @ArrayMinSize(1)
   @Type(() => CaracteristicaProdutoDTO)
   caracteristicas: CaracteristicaProdutoDTO[];
 
