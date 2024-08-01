@@ -1,4 +1,4 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, NotFoundException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { PedidoEntity } from './pedido.entity';
 import { In, Repository } from 'typeorm';
@@ -31,14 +31,21 @@ export class PedidoService {
 
     const pedidoEntity = new PedidoEntity();
     pedidoEntity.status = StatusPedido.EM_PROCESSAMENTO;
-    pedidoEntity.usuario = usuario;
+
+    if (usuario === undefined) {
+      throw new NotFoundException('Usuário não encontrado');
+    }
 
     const pedidosItensEntity = dadosDoPedido.pedidosItem.map((itemPedido) => {
       const produtoRelacionado = produtosRelacionados.find(
         (produto) => produto.id === itemPedido.produtoId,
       );
+
+      if (produtoRelacionado === undefined) {
+        throw new NotFoundException('Produto não encontrado');
+      }
       const pedidoItemEntity = new PedidoItemEntity();
-      pedidoItemEntity.produto = produtoRelacionado;
+
       pedidoItemEntity.precoVenda = produtoRelacionado.valor;
       pedidoItemEntity.quantidade = itemPedido.quantidade;
       pedidoItemEntity.produto.quantidadeDisponivel -= itemPedido.quantidade;
