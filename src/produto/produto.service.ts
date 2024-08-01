@@ -21,6 +21,8 @@ export class ProdutoService {
     produtoEntity.quantidadeDisponivel = dadosProduto.quantidadeDisponivel;
     produtoEntity.descricao = dadosProduto.descricao;
     produtoEntity.categoria = dadosProduto.categoria;
+    produtoEntity.caracteristicas = dadosProduto.caracteristicas;
+    produtoEntity.imagens = dadosProduto.imagens;
 
     return await this.produtoRepository.save(produtoEntity);
   }
