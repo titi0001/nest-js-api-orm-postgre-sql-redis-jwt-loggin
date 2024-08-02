@@ -85,11 +85,22 @@ export class PedidoService {
   }
 
   async obtemPedidosDeUsuario(usuarioId: string) {
-    const pedidos = await this.pedidoRepository.find({
+    const usuario = await this.pedidoRepository.find({
       where: { usuario: { id: usuarioId } },
     });
 
-    return pedidos;
+    if (usuario === null) {
+      throw new NotFoundException('O usuario não foi encontrado');
+    }
+
+    return this.pedidoRepository.find({
+      where: {
+        usuario: { id: usuarioId },
+      },
+      relations: {
+        usuario: true,
+      },
+    });
   }
 
   async atualizaPedido(id: string, atualizaPedidoDTO: AtualizaPedidoDTO) {
