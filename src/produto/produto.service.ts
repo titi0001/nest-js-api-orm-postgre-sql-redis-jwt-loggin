@@ -48,7 +48,7 @@ export class ProdutoService {
 
   async deletaProduto(id: string): Promise<void> {
     const result = await this.produtoRepository.delete({ id });
-    if (result.affected === 0) {
+    if (!result.affected) {
       throw new Error('Produto não encontrado');
     }
   }
