@@ -5,7 +5,7 @@ import { TypeOrmModule } from '@nestjs/typeorm';
 import { PostgresConfigService } from './config/postgres.config.service';
 import { ConfigModule } from '@nestjs/config';
 import { PedidoModule } from './pedido/pedido.module';
-import { httpExceptionFilter } from './filter/http exception filter';
+import { httpExceptionGlobal } from './filter/http_exception_Global';
 
 @Module({
   imports: [
@@ -23,7 +23,7 @@ import { httpExceptionFilter } from './filter/http exception filter';
   providers: [
     {
       provide: 'APP_FILTER',
-      useClass: httpExceptionFilter,
+      useClass: httpExceptionGlobal,
     },
   ],
 })
