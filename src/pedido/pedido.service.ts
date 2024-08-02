@@ -110,7 +110,7 @@ export class PedidoService {
       throw new NotFoundException('Pedido não encontrado');
     }
 
-    Object.assign(pedido, atualizaPedidoDTO);
+    Object.assign(pedido, atualizaPedidoDTO as PedidoEntity);
 
     return this.pedidoRepository.save(pedido);
   }

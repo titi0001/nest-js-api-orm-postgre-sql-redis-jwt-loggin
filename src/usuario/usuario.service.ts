@@ -1,9 +1,10 @@
 import { Injectable, NotFoundException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { UsuarioEntity } from './usuario.entity';
-import { Not, Repository } from 'typeorm';
+import { Repository } from 'typeorm';
 import { ListaUsuariosDTO } from './dto/ListaUsuarios.dto';
 import { AtualizaUsuarioDTO } from './dto/AtualizaUsuario.dto';
+import { CriaUsuarioDTO } from './dto/CriaUsuario.dto';
 
 @Injectable()
 export class UsuarioService {
@@ -12,8 +13,11 @@ export class UsuarioService {
     private readonly usuarioRepository: Repository<UsuarioEntity>,
   ) {}
 
-  async criaUsuario(usuarioEntity: UsuarioEntity) {
-    return await this.usuarioRepository.save(usuarioEntity);
+  async criaUsuario(usuarioEntity: CriaUsuarioDTO) {
+    const usuario = new UsuarioEntity();
+    Object.assign(usuario, usuarioEntity as UsuarioEntity);
+
+    return await this.usuarioRepository.save(usuario);
   }
 
   async listaUsuarios() {
