@@ -15,14 +15,7 @@ export class ProdutoService {
 
   async criaProduto(dadosProduto: CriaProdutoDTO) {
     const produtoEntity = new ProdutoEntity();
-
-    produtoEntity.nome = dadosProduto.nome;
-    produtoEntity.valor = dadosProduto.valor;
-    produtoEntity.quantidadeDisponivel = dadosProduto.quantidadeDisponivel;
-    produtoEntity.descricao = dadosProduto.descricao;
-    produtoEntity.categoria = dadosProduto.categoria;
-    produtoEntity.caracteristicas = dadosProduto.caracteristicas;
-    produtoEntity.imagens = dadosProduto.imagens;
+    Object.assign(produtoEntity, dadosProduto as ProdutoEntity);
 
     return await this.produtoRepository.save(produtoEntity);
   }
@@ -42,7 +35,7 @@ export class ProdutoService {
     if (!entity) {
       throw new Error('Produto não encontrado');
     }
-    Object.assign(entity, novosDados);
+    Object.assign(entity, novosDados as ProdutoEntity);
     return await this.produtoRepository.save(entity);
   }
 
