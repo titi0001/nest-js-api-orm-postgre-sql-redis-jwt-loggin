@@ -8,7 +8,6 @@ import {
   Put,
   UseInterceptors,
 } from '@nestjs/common';
-
 import { AtualizaProdutoDTO } from './dto/AtualizaProduto.dto';
 import { CriaProdutoDTO } from './dto/CriaProduto.dto';
 import { ProdutoService } from './produto.service';
@@ -30,6 +29,7 @@ export class ProdutoController {
   }
 
   @Get()
+  @UseInterceptors(CacheInterceptor)
   async listaTodos() {
     return this.produtoService.listaProdutos();
   }
@@ -51,7 +51,7 @@ export class ProdutoController {
     );
 
     return {
-      mensagem: 'produto atualizado com sucesso',
+      mensagem: 'Produto atualizado com sucesso',
       produto: produtoAlterado,
     };
   }
@@ -61,7 +61,7 @@ export class ProdutoController {
     const produtoRemovido = await this.produtoService.deletaProduto(id);
 
     return {
-      mensagem: 'produto removido com sucesso',
+      mensagem: 'Produto removido com sucesso',
       produto: produtoRemovido,
     };
   }
