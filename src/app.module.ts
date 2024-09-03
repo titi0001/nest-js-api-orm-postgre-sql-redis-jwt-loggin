@@ -7,7 +7,7 @@ import { ConfigModule } from '@nestjs/config';
 import { PedidoModule } from './modulos/pedido/pedido.module';
 import { CacheModule } from '@nestjs/cache-manager';
 import { redisStore } from 'cache-manager-redis-yet';
-import { httpExceptionGlobal } from './filter/http_exception_Global';
+import { httpExceptionGlobal } from './resources/filter/http_exception_Global';
 import { APP_FILTER } from '@nestjs/core';
 
 @Module({
