@@ -6,6 +6,7 @@ import {
   Param,
   Post,
   Put,
+  UseInterceptors,
 } from '@nestjs/common';
 import { CriaUsuarioDTO } from './dto/CriaUsuario.dto';
 import { UsuarioEntity } from './usuario.entity';
@@ -13,6 +14,7 @@ import { v4 as uuid } from 'uuid';
 import { ListaUsuariosDTO } from './dto/ListaUsuarios.dto';
 import { AtualizaUsuarioDTO } from './dto/AtualizaUsuario.dto';
 import { UsuarioService } from './usuario.service';
+import { CacheInterceptor } from '@nestjs/cache-manager';
 
 @Controller('/usuarios')
 export class UsuarioController {
@@ -34,6 +36,7 @@ export class UsuarioController {
   }
 
   @Get()
+  @UseInterceptors(CacheInterceptor)
   async listaUsuarios() {
     const usuariosSalvos = await this.usuarioService.listaUsuarios();
 

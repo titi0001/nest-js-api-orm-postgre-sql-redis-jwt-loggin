@@ -6,10 +6,12 @@ import {
   Body,
   Patch,
   Param,
+  UseInterceptors,
 } from '@nestjs/common';
 import { PedidoService } from './pedido.service';
 import { CriaPedidoDTO } from './dto/criaPedido.dto';
 import { AtualizaPedidoDTO } from './dto/atulizaPedido.dto';
+import { CacheInterceptor } from '@nestjs/cache-manager';
 
 @Controller('pedidos')
 export class PedidoController {
@@ -29,6 +31,7 @@ export class PedidoController {
   }
 
   @Get()
+  @UseInterceptors(CacheInterceptor)
   async obtemPedidosDeUsuario(@Query('usuarioId') usuarioId: string) {
     const pedidos = await this.pedidoService.obtemPedidosDeUsuario(usuarioId);
 
