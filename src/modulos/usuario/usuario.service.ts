@@ -28,18 +28,6 @@ export class UsuarioService {
     return usuariosLista;
   }
 
-  async buscaUsuarioPorEmail(email: string) {
-    const checkEmail = await this.usuarioRepository.findOne({
-      where: { email },
-    });
-
-    if (checkEmail === null) {
-      throw new NotFoundException('O email não foi encontrado');
-    }
-
-    return checkEmail;
-  }
-
   async atualizaUsuario(id: string, novosDados: AtualizaUsuarioDTO) {
     const usuario = await this.usuarioRepository.findOneBy({ id });
 
