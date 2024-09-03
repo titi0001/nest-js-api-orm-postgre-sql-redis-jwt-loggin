@@ -25,7 +25,7 @@ import { APP_FILTER } from '@nestjs/core';
     CacheModule.registerAsync({
       useFactory: async () => ({
         store: await redisStore({
-          ttl: 600000,
+          ttl: 10 * 1000,
         }),
       }),
       isGlobal: true,
