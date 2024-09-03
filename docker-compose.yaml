@@ -39,7 +39,7 @@ services:
     container_name: redisinsight
     image: redis/redisinsight:latest
     ports:
-      - "5540:5540"  # Mapeamento de portas para acessar o RedisInsight
+      - "5540:5540" 
     depends_on:
       - redis
 
