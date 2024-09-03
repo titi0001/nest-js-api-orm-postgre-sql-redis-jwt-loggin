@@ -5,15 +5,16 @@ import { TypeOrmModule } from '@nestjs/typeorm';
 import { PostgresConfigService } from './config/postgres.config.service';
 import { ConfigModule } from '@nestjs/config';
 import { PedidoModule } from './modulos/pedido/pedido.module';
-import { httpExceptionGlobal } from './filter/http_exception_Global';
 import { CacheModule } from '@nestjs/cache-manager';
+import { redisStore } from 'cache-manager-redis-yet';
+import { httpExceptionGlobal } from './filter/http_exception_Global';
+import { APP_FILTER } from '@nestjs/core';
 
 @Module({
   imports: [
     UsuarioModule,
     ProdutoModule,
     PedidoModule,
-    CacheModule.register({ isGlobal: true, ttl: 10000 }),
     ConfigModule.forRoot({
       isGlobal: true,
     }),
@@ -21,10 +22,18 @@ import { CacheModule } from '@nestjs/cache-manager';
       useClass: PostgresConfigService,
       inject: [PostgresConfigService],
     }),
+    CacheModule.registerAsync({
+      useFactory: async () => ({
+        store: await redisStore({
+          ttl: 600000,
+        }),
+      }),
+      isGlobal: true,
+    }),
   ],
   providers: [
     {
-      provide: 'APP_FILTER',
+      provide: APP_FILTER,
       useClass: httpExceptionGlobal,
     },
   ],
