@@ -59,4 +59,15 @@ export class UsuarioService {
       throw new NotFoundException('Usuário não encontrado');
     }
   }
+
+  async buscaPorEmail(email: string) {
+    const checkEmail = await this.usuarioRepository.findOne({
+      where: { email },
+    });
+
+    if (checkEmail === null)
+      throw new NotFoundException('O email não foi encontrado.');
+
+    return checkEmail;
+  }
 }
