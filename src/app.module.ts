@@ -9,6 +9,7 @@ import { CacheModule } from '@nestjs/cache-manager';
 import { redisStore } from 'cache-manager-redis-yet';
 import { httpExceptionGlobal } from './resources/filter/http_exception_Global';
 import { APP_FILTER } from '@nestjs/core';
+import { AutenticacaoModule } from './modulos/autenticacao/autenticacao.module';
 
 @Module({
   imports: [
@@ -30,6 +31,7 @@ import { APP_FILTER } from '@nestjs/core';
       }),
       isGlobal: true,
     }),
+    AutenticacaoModule,
   ],
   providers: [
     {
