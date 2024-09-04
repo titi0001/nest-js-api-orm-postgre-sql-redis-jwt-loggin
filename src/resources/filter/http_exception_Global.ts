@@ -11,8 +11,6 @@ import { HttpAdapterHost } from '@nestjs/core';
 export class httpExceptionGlobal implements ExceptionFilter {
   constructor(private adapterHost: HttpAdapterHost) {}
   catch(exception: unknown, host: ArgumentsHost) {
-    console.log(exception);
-
     const { httpAdapter } = this.adapterHost;
 
     const ctx = host.switchToHttp();
