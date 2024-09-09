@@ -1,4 +1,4 @@
-import { Module } from '@nestjs/common';
+import { ClassSerializerInterceptor, Module } from '@nestjs/common';
 import { UsuarioModule } from './modulos/usuario/usuario.module';
 import { ProdutoModule } from './modulos/produto/produto.module';
 import { TypeOrmModule } from '@nestjs/typeorm';
@@ -8,7 +8,7 @@ import { PedidoModule } from './modulos/pedido/pedido.module';
 import { CacheModule } from '@nestjs/cache-manager';
 import { redisStore } from 'cache-manager-redis-yet';
 import { httpExceptionGlobal } from './resources/filter/http_exception_Global';
-import { APP_FILTER } from '@nestjs/core';
+import { APP_FILTER, APP_INTERCEPTOR } from '@nestjs/core';
 import { AutenticacaoModule } from './modulos/autenticacao/autenticacao.module';
 
 @Module({
@@ -37,6 +37,10 @@ import { AutenticacaoModule } from './modulos/autenticacao/autenticacao.module';
     {
       provide: APP_FILTER,
       useClass: httpExceptionGlobal,
+    },
+    {
+      provide: APP_INTERCEPTOR,
+      useClass: ClassSerializerInterceptor,
     },
   ],
 })
