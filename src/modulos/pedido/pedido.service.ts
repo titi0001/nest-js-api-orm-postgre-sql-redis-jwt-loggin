@@ -42,9 +42,13 @@ export class PedidoService {
       const produtoRelacionado = produtosRelacionados.find(
         (produto) => produto.id === itemPedido.produtoId,
       );
+
       if (produtoRelacionado === undefined) {
-        throw new NotFoundException('Produto não encontrado');
+        throw new NotFoundException(
+          `O produto com id ${itemPedido.produtoId} não foi encontrado`,
+        );
       }
+
       if (itemPedido.quantidade > produtoRelacionado.quantidadeDisponivel) {
         throw new BadRequestException(
           `A quantidade solicitada (${itemPedido.quantidade}) é maior que a quantidade disponível (${produtoRelacionado.quantidadeDisponivel}) do produto ${produtoRelacionado.nome}`,

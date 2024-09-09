@@ -21,11 +21,11 @@ export class PedidoController {
   constructor(private readonly pedidoService: PedidoService) {}
 
   @Post()
-  CriaPedido(
+  async CriaPedido(
     @Query('usuarioId') usuarioId: string,
     @Body() dadosDoPedido: CriaPedidoDTO,
   ) {
-    const pedidoCriado = this.pedidoService.cadastraPedido(
+    const pedidoCriado = await this.pedidoService.cadastraPedido(
       usuarioId,
       dadosDoPedido,
     );
