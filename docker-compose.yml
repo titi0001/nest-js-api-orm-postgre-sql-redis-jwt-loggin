@@ -1,4 +1,3 @@
-
 services:
   postgres:
     image: postgres:latest
@@ -10,7 +9,7 @@ services:
     volumes:
       - postgres:/data/postgres
     ports:
-      - "5432:5432"
+      - '5432:5432'
     networks:
       - postgres
     restart: unless-stopped
@@ -21,7 +20,7 @@ services:
       PGADMIN_DEFAULT_EMAIL: ${DB_ADMIN_EMAIL}
       PGADMIN_DEFAULT_PASSWORD: ${DB_PASSWORD}
     ports:
-      - "8081:80"
+      - '8081:80'
     depends_on:
       - postgres
     networks:
@@ -31,7 +30,7 @@ services:
     container_name: redis-cache
     image: redis:7.4.0-alpine
     ports:
-      - "6379:6379"
+      - '6379:6379'
     volumes:
       - redis:/data
 
@@ -39,7 +38,7 @@ services:
     container_name: redisinsight
     image: redis/redisinsight:latest
     ports:
-      - "5540:5540" 
+      - '5540:5540'
     depends_on:
       - redis
 
