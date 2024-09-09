@@ -40,7 +40,7 @@ export class ProdutoController {
     return this.produtoService.listaProdutoPorId(id);
   }
 
-  @Put('/:id/:usuarioId')
+  @Put('/:id')
   async atualiza(
     @Param('id') id: string,
     @Body() dadosProduto: AtualizaProdutoDTO,
