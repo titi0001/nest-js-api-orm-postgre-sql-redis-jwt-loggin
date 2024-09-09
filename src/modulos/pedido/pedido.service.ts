@@ -24,6 +24,16 @@ export class PedidoService {
     private readonly produtoRepository: Repository<ProdutoEntity>,
   ) {}
 
+  private async buscaUsuario(id: string) {
+    const usuario = await this.usuarioRepository.findOneBy({ id });
+
+    if (usuario === null) {
+      throw new NotFoundException('O usuário não foi encontrado');
+    }
+
+    return usuario;
+  }
+
   private trataDadosDoPedido(
     dadosDoPedido: CriaPedidoDTO,
     produtosRelacionados: ProdutoEntity[],
@@ -44,10 +54,7 @@ export class PedidoService {
   }
 
   async cadastraPedido(usuarioId: string, dadosDoPedido: CriaPedidoDTO) {
-    const usuario = await this.usuarioRepository.findOneBy({ id: usuarioId });
-    if (usuario === undefined) {
-      throw new NotFoundException('Usuário não encontrado');
-    }
+    const usuario = await this.buscaUsuario(usuarioId);
 
     const produtosIds = dadosDoPedido.pedidosItem.map(
       (itemPedido) => itemPedido.produtoId,
@@ -55,19 +62,22 @@ export class PedidoService {
     const produtosRelacionados = await this.produtoRepository.findBy({
       id: In(produtosIds),
     });
+    const pedidoEntity = new PedidoEntity();
 
     this.trataDadosDoPedido(dadosDoPedido, produtosRelacionados);
 
-    const pedidoEntity = new PedidoEntity();
     pedidoEntity.status = StatusPedido.EM_PROCESSAMENTO;
+    pedidoEntity.usuario = usuario;
 
     const pedidosItensEntity = dadosDoPedido.pedidosItem.map((itemPedido) => {
-      const pedidoItemEntity = new PedidoItemEntity();
       const produtosRelacionado = produtosRelacionados.find(
         (produto) => produto.id === itemPedido.produtoId,
       );
+
+      const pedidoItemEntity = new PedidoItemEntity();
       pedidoItemEntity.produto = produtosRelacionado!;
       pedidoItemEntity.precoVenda = produtosRelacionado!.valor;
+
       pedidoItemEntity.quantidade = itemPedido.quantidade;
       pedidoItemEntity.produto.quantidadeDisponivel -= itemPedido.quantidade;
       return pedidoItemEntity;
