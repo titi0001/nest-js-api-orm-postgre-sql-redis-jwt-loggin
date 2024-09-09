@@ -8,12 +8,16 @@ import {
   Param,
   UseInterceptors,
   UseGuards,
+  Req,
 } from '@nestjs/common';
 import { PedidoService } from './pedido.service';
 import { CriaPedidoDTO } from './dto/criaPedido.dto';
 import { AtualizaPedidoDTO } from './dto/atulizaPedido.dto';
 import { CacheInterceptor } from '@nestjs/cache-manager';
-import { AutenticacaoGuard } from '../autenticacao/autenticacao/autenticacao.guard';
+import {
+  AutenticacaoGuard,
+  ReqComUsuario,
+} from '../autenticacao/autenticacao/autenticacao.guard';
 
 @UseGuards(AutenticacaoGuard)
 @Controller('pedidos')
@@ -22,9 +26,10 @@ export class PedidoController {
 
   @Post()
   async CriaPedido(
-    @Query('usuarioId') usuarioId: string,
+    @Req() req: ReqComUsuario,
     @Body() dadosDoPedido: CriaPedidoDTO,
   ) {
+    const usuarioId = req.usuario.sub;
     const pedidoCriado = await this.pedidoService.cadastraPedido(
       usuarioId,
       dadosDoPedido,
@@ -38,7 +43,8 @@ export class PedidoController {
 
   @Get()
   @UseInterceptors(CacheInterceptor)
-  async obtemPedidosDeUsuario(@Query('usuarioId') usuarioId: string) {
+  async obtemPedidosDeUsuario(@Req() req: ReqComUsuario) {
+    const usuarioId = req.usuario.sub;
     const pedidos = await this.pedidoService.obtemPedidosDeUsuario(usuarioId);
 
     return pedidos;
@@ -46,12 +52,15 @@ export class PedidoController {
 
   @Patch(':id')
   async atualizaPedido(
+    @Req() req: ReqComUsuario,
     @Param('id') pedidoId: string,
     @Body() dadosParaAtualizar: AtualizaPedidoDTO,
   ) {
+    const usuarioId = req.usuario.sub;
     const pedidoAtualizado = await this.pedidoService.atualizaPedido(
       pedidoId,
       dadosParaAtualizar,
+      usuarioId,
     );
 
     return pedidoAtualizado;
