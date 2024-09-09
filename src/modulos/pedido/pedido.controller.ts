@@ -7,12 +7,15 @@ import {
   Patch,
   Param,
   UseInterceptors,
+  UseGuards,
 } from '@nestjs/common';
 import { PedidoService } from './pedido.service';
 import { CriaPedidoDTO } from './dto/criaPedido.dto';
 import { AtualizaPedidoDTO } from './dto/atulizaPedido.dto';
 import { CacheInterceptor } from '@nestjs/cache-manager';
+import { AutenticacaoGuard } from '../autenticacao/autenticacao/autenticacao.guard';
 
+@UseGuards(AutenticacaoGuard)
 @Controller('pedidos')
 export class PedidoController {
   constructor(private readonly pedidoService: PedidoService) {}
@@ -27,7 +30,10 @@ export class PedidoController {
       dadosDoPedido,
     );
 
-    return pedidoCriado;
+    return {
+      mensagem: 'Pedido feito com sucesso.',
+      pedido: pedidoCriado,
+    };
   }
 
   @Get()
