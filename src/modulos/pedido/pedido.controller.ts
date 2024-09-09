@@ -47,7 +47,10 @@ export class PedidoController {
     const usuarioId = req.usuario.sub;
     const pedidos = await this.pedidoService.obtemPedidosDeUsuario(usuarioId);
 
-    return pedidos;
+    return {
+      mensagem: 'Pedidos obtidos com sucesso.',
+      pedidos,
+    };
   }
 
   @Patch(':id')
