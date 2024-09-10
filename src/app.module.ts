@@ -14,6 +14,7 @@ import { redisStore } from 'cache-manager-redis-yet';
 import { httpExceptionGlobal } from './resources/filter/http_exception_Global';
 import { APP_FILTER, APP_INTERCEPTOR } from '@nestjs/core';
 import { AutenticacaoModule } from './modulos/autenticacao/autenticacao.module';
+import { LoggerGlobalInterceptor } from './resources/interceptores/logger-global/logger-global.interceptor';
 
 @Module({
   imports: [
@@ -45,6 +46,10 @@ import { AutenticacaoModule } from './modulos/autenticacao/autenticacao.module';
     {
       provide: APP_INTERCEPTOR,
       useClass: ClassSerializerInterceptor,
+    },
+    {
+      provide: APP_INTERCEPTOR,
+      useClass: LoggerGlobalInterceptor,
     },
     ConsoleLogger,
   ],
